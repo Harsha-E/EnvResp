@@ -1,5 +1,8 @@
-import React from "react";
-import museumArchival from "../../assets/museum_archival.jpg";
+import React, { useState, useEffect } from "react";
+import posterStory1 from "../../assets/poster_story_1.jpg";
+import posterStory2 from "../../assets/poster_story_2.jpg";
+import posterStory3 from "../../assets/poster_story_3.jpg";
+import posterStory4 from "../../assets/poster_story_4.jpg";
 
 interface TypographyPosterLayoutProps {
   isScreenshotMode: boolean;
@@ -8,28 +11,78 @@ interface TypographyPosterLayoutProps {
 export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
   isScreenshotMode,
 }) => {
-  const chapters = [
+  const [activeStory, setActiveStory] = useState<number>(0);
+
+  const stories = [
     {
-      roman: "CHAPTER I",
-      title: "Introduction to Technology Domains",
-      detail: "AI, Cloud Infra, Embedded Systems, IoT, Cybersecurity & Robotics",
+      id: 1,
+      title: "THE IDEA ENGINE & CLAY FESTIVAL",
+      subtitle: "Sculptural Abstract Glass & Circuit Centerpiece",
+      img: posterStory1,
+      tag: "PIXAR / CLAYMorphism EDITION",
     },
     {
-      roman: "CHAPTER II",
-      title: "Roadmap to Hackathons",
-      detail: "Ideation, Rapid MVP Prototyping & High-Impact Pitching",
+      id: 2,
+      title: "THE HACKATHON ROCKET LAUNCHPAD",
+      subtitle: "Prototyping Workbenches, Soldering & Rocket Silos",
+      img: posterStory2,
+      tag: "BLENDER 3D LAUNCH EDITION",
     },
     {
-      roman: "CHAPTER III",
-      title: "Interactive Technology Showcase",
-      detail: "Spatial WebGL Shaders, Hardware Circuits & Real-time Demos",
+      id: 3,
+      title: "THE AI PAVILION & NEURAL GARDEN",
+      subtitle: "Claude vs ChatGPT vs Gemini Discussion Table",
+      img: posterStory3,
+      tag: "CINEMA4D AI DEBATE EDITION",
     },
     {
-      roman: "CHAPTER IV",
-      title: "The AI Discourse: Claude vs ChatGPT vs Gemini",
-      detail: "LLM Benchmarks, Agentic Architectures & the Future of Code",
+      id: 4,
+      title: "MONUMENT VALLEY ARCHITECTURAL WORLD",
+      subtitle: "White Architectural Ramps, Bridges & Scaffolding",
+      img: posterStory4,
+      tag: "APPLE INDUSTRIAL DESIGN EDITION",
     },
   ];
+
+  const agendaChapters = [
+    {
+      roman: "I. EXHIBITION PAVILION",
+      title: "Introduction to Tech Domains",
+      detail: "AI, Cloud, Embedded, IoT, Cybersecurity & Robotics",
+    },
+    {
+      roman: "II. ROCKET LAUNCHPAD",
+      title: "Roadmap to Hackathons",
+      detail: "Ideation, Rapid MVP Prototyping & Pitching",
+    },
+    {
+      roman: "III. SPATIAL WORKSHOP",
+      title: "Interactive Technology Experience",
+      detail: "Spatial WebGL Shaders, Circuits & Hardware Demos",
+    },
+    {
+      roman: "IV. THE AI DISCOURSE",
+      title: "Claude vs ChatGPT vs Gemini",
+      detail: "LLM Benchmarks, Agentic Patterns & Future Code",
+    },
+  ];
+
+  // Hotkey listener for 1, 2, 3, 4
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if (e.key === "1") setActiveStory(0);
+      else if (e.key === "2") setActiveStory(1);
+      else if (e.key === "3") setActiveStory(2);
+      else if (e.key === "4") setActiveStory(3);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const currentStory = stories[activeStory];
 
   return (
     <div
@@ -38,7 +91,7 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
       }`}
     >
       {/* Outer Museum Double Hairline Print Frame - Fixed Height 100vh Fit */}
-      <div className="relative w-full h-full border-2 border-slate-900/90 p-4 sm:p-6 md:p-8 flex flex-col justify-between bg-[#F7F4EE]/95 shadow-2xl overflow-hidden">
+      <div className="relative w-full h-full border-2 border-slate-900/90 p-4 sm:p-6 md:p-8 flex flex-col justify-between bg-[#FAF8F5]/95 shadow-2xl overflow-hidden">
         {/* Gallery Corner Registration Crop Marks */}
         <div className="absolute top-1.5 left-1.5 font-mono text-[8px] text-slate-500 font-bold">+ REG. 01</div>
         <div className="absolute top-1.5 right-1.5 font-mono text-[8px] text-slate-500 font-bold">+ REG. 02</div>
@@ -48,12 +101,12 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
         {/* Exhibition Header Catalogue Bar */}
         <header className="w-full flex justify-between items-center pb-3 border-b-2 border-slate-900 gap-2 flex-shrink-0">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] sm:text-xs tracking-[0.3em] uppercase text-slate-950 font-black">
-              EXHIBITION CATALOGUE NO. 01 / 2026
+            <span className="font-mono text-[10px] sm:text-xs tracking-[0.35em] uppercase text-slate-950 font-black">
+              EXHIBITION PRINT NO. 0{currentStory.id} / 2026
             </span>
           </div>
-          <div className="font-mono text-[10px] sm:text-xs text-slate-800 tracking-wider font-semibold">
-            SATURDAY, 25 JULY 2026 • 10:00 AM IST
+          <div className="font-mono text-[10px] sm:text-xs text-slate-900 tracking-wider font-bold">
+            SATURDAY • 25 JULY 2026 • 10:00 AM IST
           </div>
         </header>
 
@@ -75,9 +128,9 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
               Where Curiosity Meets Creation
             </p>
 
-            {/* Gallery Description Note */}
-            <div className="mt-4 pt-3 border-t border-slate-900/30 max-w-lg font-serif text-xs sm:text-sm text-slate-700 leading-relaxed italic hidden sm:block">
-              "An illustrated exhibition into the frontiers of artificial intelligence, spatial computing, embedded systems, and rapid innovation."
+            {/* Active Story Description */}
+            <div className="mt-4 pt-3 border-t border-slate-900/30 max-w-lg font-serif text-xs sm:text-sm text-slate-800 leading-relaxed italic">
+              "{currentStory.subtitle}"
             </div>
           </div>
 
@@ -86,27 +139,27 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
             <div className="relative border-2 border-slate-900 bg-white p-2 shadow-xl max-w-xs sm:max-w-md w-full">
               <div className="overflow-hidden border border-slate-800 max-h-[160px] sm:max-h-[220px] md:max-h-[280px]">
                 <img
-                  src={museumArchival}
-                  alt="Museum Quality Miniature Tech Illustration"
+                  src={currentStory.img}
+                  alt={currentStory.title}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="mt-2 flex justify-between items-center font-mono text-[9px] text-slate-600">
-                <span>FIG. 1 — MINIATURE EXPLORERS IN TECH</span>
-                <span>ARCHIVAL C4D EDITION</span>
+              <div className="mt-2 flex justify-between items-center font-mono text-[9px] text-slate-700 font-bold">
+                <span>STORY 0{currentStory.id}: {currentStory.title}</span>
+                <span>{currentStory.tag}</span>
               </div>
             </div>
           </div>
         </main>
 
-        {/* 4 Chapter Movement Agenda Catalogue */}
+        {/* Physical Agenda Catalogue */}
         <section className="w-full pt-3 border-t-2 border-slate-900 flex-shrink-0">
           <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-slate-950 mb-2 font-black">
-            PROGRAMME MOVEMENTS & CHAPTERS
+            PHYSICAL EXHIBITION AGENDA
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            {chapters.map((ch, idx) => (
+            {agendaChapters.map((ch, idx) => (
               <div key={idx} className="flex flex-col border-l-2 border-slate-900 pl-2.5 py-0.5">
                 <span className="font-mono text-[9px] sm:text-[10px] font-bold text-slate-500 mb-0.5">
                   {ch.roman}
@@ -122,10 +175,25 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
           </div>
         </section>
 
-        {/* Museum Poster Colophon Footer */}
-        <footer className="w-full flex justify-between items-center pt-2 mt-2 border-t border-slate-900/20 font-mono text-[9px] text-slate-600 flex-shrink-0">
-          <div>CURATED BY THE TECH UNIVERSE BOARD • FINE ART PRINT EDITION</div>
-          <div>PRINTED IN ARCHIVAL MONOCHROME & OPAQUE PASTELS</div>
+        {/* Poster Colophon & Story Selector Hotkey Bar */}
+        <footer className="w-full flex flex-col sm:flex-row justify-between items-center pt-2 mt-2 border-t border-slate-900/20 font-mono text-[9px] text-slate-700 gap-1 flex-shrink-0 font-bold">
+          <div>CURATED BY THE TECH UNIVERSE BOARD • A0 FINE ART PRINT EDITION</div>
+          <div className="flex items-center gap-2">
+            <span>PRESS KEYS FOR STORIES:</span>
+            {[1, 2, 3, 4].map((num, i) => (
+              <button
+                key={num}
+                onClick={() => setActiveStory(i)}
+                className={`px-1.5 py-0.5 rounded border transition-all ${
+                  activeStory === i
+                    ? "bg-slate-950 text-white border-slate-950"
+                    : "bg-white text-slate-800 border-slate-300 hover:border-slate-800"
+                }`}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
         </footer>
       </div>
     </div>

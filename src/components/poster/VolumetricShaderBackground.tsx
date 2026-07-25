@@ -20,7 +20,7 @@ const fragmentShader = /* glsl */ `
 
   varying vec2 vUv;
 
-  // 3D Simplex noise implementation for volumetric light drift
+  // 3D Simplex noise
   vec4 permute(vec4 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
   vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
 
@@ -87,43 +87,48 @@ const fragmentShader = /* glsl */ `
   void main() {
     vec2 st = (gl_FragCoord.xy - 0.5 * uResolution) / min(uResolution.x, uResolution.y);
     
-    // Space bending around cursor
-    vec2 mouseOffset = (uMouse - 0.5) * 2.0;
-    float distToMouse = length(st - mouseOffset * 0.4);
-    float warp = exp(-distToMouse * 3.5) * 0.18;
-    st += normalize(st - mouseOffset * 0.4 + 0.0001) * warp;
+    // Mouse spatial distortion & chromatic dispersion offset
+    vec2 mouseOffset = (uMouse - 0.5) * 1.8;
+    float distToMouse = length(st - mouseOffset * 0.5);
+    float dispersion = exp(-distToMouse * 3.0) * 0.25;
 
-    // Slow organic time drift
-    float t = uTime * 0.04;
+    float t = uTime * 0.035;
 
-    // Layer 1: Volumetric deep space atmosphere density
-    float n1 = snoise(vec3(st * 1.2, t * 0.8));
-    float n2 = snoise(vec3(st * 2.5 + vec2(n1 * 0.3), t * 1.2));
-    float n3 = snoise(vec3(st * 4.0 - vec2(n2 * 0.2), t * 0.5));
+    // Chromatic dispersion offsets for Red, Green, Blue channels
+    vec2 stR = st + vec2(dispersion * 0.08, dispersion * 0.05);
+    vec2 stG = st;
+    vec2 stB = st - vec2(dispersion * 0.08, dispersion * 0.05);
 
-    // Base Deep Space Palette
-    vec3 deepBlack   = vec3(0.02, 0.03, 0.06); // Deep space background
-    vec3 electricBlue = vec3(0.0, 0.35, 0.95);  // Primary tech glow
-    vec3 cyanGlow     = vec3(0.0, 0.88, 0.96);  // Accent light refraction
-    vec3 purpleNebula = vec3(0.55, 0.2, 0.92);  // Volumetric cloud energy
+    // Layered Holographic Caustics
+    float nR = snoise(vec3(stR * 1.5, t * 0.8));
+    float nG = snoise(vec3(stG * 1.5, t * 0.8 + 1.5));
+    float nB = snoise(vec3(stB * 1.5, t * 0.8 + 3.0));
 
-    // Composite volumetric light field
-    float density = clamp(n1 * 0.5 + n2 * 0.35 + n3 * 0.15 + 0.3, 0.0, 1.0);
-    
-    // Smooth color redistribution based on noise density
-    vec3 col = mix(deepBlack, purpleNebula, smoothstep(0.2, 0.75, density) * 0.45);
-    col = mix(col, electricBlue, smoothstep(0.4, 0.85, density) * 0.55);
-    col = mix(col, cyanGlow, pow(clamp(n2 * n3 + 0.2, 0.0, 1.0), 3.0) * 0.6);
+    // Base Palette: Obsidian Dark + Opal Pink + Spatial Cyan + Electric Violet
+    vec3 obsidianDark  = vec3(0.03, 0.04, 0.08);  // Deep spatial background
+    vec3 opalPink      = vec3(1.0, 0.37, 0.59);   // Iridescent accent
+    vec3 spatialCyan   = vec3(0.0, 0.94, 1.0);    // Crystal refraction
+    vec3 violetGlow    = vec3(0.55, 0.36, 0.96);  // Deep aura
 
-    // Subtle radial vignetting
-    float vignette = 1.0 - length(st * 0.65);
-    col *= clamp(vignette, 0.3, 1.0);
+    float densityR = clamp(nR * 0.5 + 0.3, 0.0, 1.0);
+    float densityG = clamp(nG * 0.5 + 0.3, 0.0, 1.0);
+    float densityB = clamp(nB * 0.5 + 0.3, 0.0, 1.0);
 
-    // Add subtle ambient grain
-    float grain = (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.02;
-    col += grain;
+    vec3 colR = mix(obsidianDark, opalPink, densityR * 0.45);
+    vec3 colG = mix(obsidianDark, spatialCyan, densityG * 0.45);
+    vec3 colB = mix(obsidianDark, violetGlow, densityB * 0.45);
 
-    gl_FragColor = vec4(col, 1.0);
+    vec3 finalCol = colR * 0.38 + colG * 0.38 + colB * 0.38;
+
+    // Soft vignetting & depth gradient
+    float vignette = 1.0 - length(st * 0.6);
+    finalCol *= clamp(vignette, 0.35, 1.0);
+
+    // Micro-fine specular shimmer
+    float shimmer = pow(clamp(snoise(vec3(st * 8.0, t * 2.0)), 0.0, 1.0), 5.0) * 0.12;
+    finalCol += vec3(shimmer);
+
+    gl_FragColor = vec4(finalCol, 1.0);
   }
 `;
 

@@ -7,35 +7,12 @@ interface TechUniverseProps {
   mousePos: React.RefObject<{ x: number; y: number }>;
 }
 
-// Subtle Light Theme Floating Torus Accent
-const LightTorusAccent: React.FC<{ isFrozen: boolean }> = ({ isFrozen }) => {
-  const torusRef = useRef<THREE.Mesh>(null!);
-  const timeAcc = useRef(0);
-
-  useFrame((_, delta) => {
-    if (!isFrozen && torusRef.current) {
-      timeAcc.current += delta;
-      const t = timeAcc.current;
-      torusRef.current.rotation.x = Math.sin(t * 0.2) * 0.3;
-      torusRef.current.rotation.y = t * 0.15;
-    }
-  });
-
-  return (
-    <mesh ref={torusRef} position={[3.2, -1.6, -2.5]}>
-      <torusGeometry args={[1.5, 0.12, 16, 64]} />
-      <meshBasicMaterial color="#6366F1" wireframe transparent opacity={0.15} />
-    </mesh>
-  );
-};
-
-// Subtle Light Particle Ambient Dust
-const LightParticleDust: React.FC<{ isFrozen: boolean }> = ({ isFrozen }) => {
+const SubtlePaperDust: React.FC<{ isFrozen: boolean }> = ({ isFrozen }) => {
   const particlesRef = useRef<THREE.Points>(null!);
   const timeAcc = useRef(0);
 
   const particlesPositions = useMemo(() => {
-    const count = 120;
+    const count = 90;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 12;
@@ -51,8 +28,8 @@ const LightParticleDust: React.FC<{ isFrozen: boolean }> = ({ isFrozen }) => {
       const t = timeAcc.current;
       const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
 
-      for (let i = 0; i < 120; i++) {
-        positions[i * 3 + 1] += Math.sin(t * 0.3 + i) * 0.0015 + 0.001;
+      for (let i = 0; i < 90; i++) {
+        positions[i * 3 + 1] += Math.sin(t * 0.2 + i) * 0.001 + 0.0005;
         if (positions[i * 3 + 1] > 4.5) {
           positions[i * 3 + 1] = -4.5;
         }
@@ -66,7 +43,7 @@ const LightParticleDust: React.FC<{ isFrozen: boolean }> = ({ isFrozen }) => {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[particlesPositions, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.04} color="#818CF8" transparent opacity={0.35} sizeAttenuation />
+      <pointsMaterial size={0.035} color="#475569" transparent opacity={0.25} sizeAttenuation />
     </points>
   );
 };
@@ -74,8 +51,7 @@ const LightParticleDust: React.FC<{ isFrozen: boolean }> = ({ isFrozen }) => {
 export const TechUniverse: React.FC<TechUniverseProps> = ({ isFrozen }) => {
   return (
     <group>
-      <LightTorusAccent isFrozen={isFrozen} />
-      <LightParticleDust isFrozen={isFrozen} />
+      <SubtlePaperDust isFrozen={isFrozen} />
     </group>
   );
 };

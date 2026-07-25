@@ -208,7 +208,6 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
           <Heart className="w-3 h-3 text-rose-500 fill-rose-500" />
           <span>MINIATURE TECH CONCLAVE • SATURDAY 25 JULY 2026</span>
         </div>
-        <div className="hidden sm:block">PRESS <kbd className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300 font-bold">SPACE</kbd> FOR SCREENSHOT MODE</div>
       </footer>
     </div>
   );

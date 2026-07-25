@@ -28,7 +28,7 @@ export const LivingPoster: React.FC = () => {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="relative w-full min-h-screen bg-[#030509] overflow-hidden select-none"
+      className="relative w-full min-h-screen bg-[#FAF9F5] overflow-hidden select-none"
     >
       {/* 3D WebGL Canvas Layer */}
       <div className="absolute inset-0 z-0">

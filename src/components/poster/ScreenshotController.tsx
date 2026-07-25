@@ -40,23 +40,23 @@ export const ScreenshotController: React.FC<ScreenshotControllerProps> = ({
     <div className="fixed top-5 right-5 z-50 flex items-center gap-3 select-none">
       <button
         onClick={onToggleFreeze}
-        className={`flex items-center gap-2.5 px-4 py-2 rounded-full font-mono text-xs font-semibold backdrop-blur-2xl border transition-all duration-300 shadow-2xl ${
+        className={`flex items-center gap-2.5 px-4 py-2 rounded-full font-mono text-xs font-bold backdrop-blur-xl border transition-all duration-300 shadow-md ${
           isFrozen
-            ? "bg-pink-600/30 border-pink-400 text-pink-200 shadow-[0_0_25px_rgba(255,94,151,0.5)]"
-            : "bg-black/40 border-white/15 text-slate-300 hover:bg-black/60 hover:border-pink-400/50"
+            ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-200"
+            : "bg-white/90 border-slate-200/90 text-slate-700 hover:bg-white hover:border-indigo-300"
         }`}
       >
         {isFrozen ? (
           <>
-            <Pause className="w-3.5 h-3.5 text-pink-300 animate-pulse" />
-            <span className="text-pink-300">SPATIAL POSTER PAUSED</span>
-            <span className="text-[10px] text-slate-400 hidden sm:inline">(PRESS SPACE TO RESUME)</span>
+            <Pause className="w-3.5 h-3.5 text-white animate-pulse" />
+            <span>POSTER MODE PAUSED</span>
+            <span className="text-[10px] text-indigo-100 hidden sm:inline">(PRESS SPACE TO RESUME)</span>
           </>
         ) : (
           <>
-            <Camera className="w-3.5 h-3.5 text-pink-400" />
+            <Camera className="w-3.5 h-3.5 text-indigo-600" />
             <span>SCREENSHOT MODE</span>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-pink-300">SPACE</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-100 text-[10px] text-slate-700 font-bold border border-slate-200">SPACE</kbd>
           </>
         )}
       </button>

@@ -1,9 +1,9 @@
-import Demo from "./components/demo";
+import { LivingPoster } from "./components/poster/LivingPoster";
 
 function App() {
   return (
-    <main className="min-h-screen bg-black">
-      <Demo />
+    <main className="w-full min-h-screen bg-[#030509]">
+      <LivingPoster />
     </main>
   );
 }

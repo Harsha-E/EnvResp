@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import posterStory1 from "../../assets/poster_story_1.jpg";
-import posterStory2 from "../../assets/poster_story_2.jpg";
-import posterStory3 from "../../assets/poster_story_3.jpg";
+import videoStory1 from "../../assets/Clay_developer_rises_from_brain_202607250656.mp4";
+import videoStory2 from "../../assets/Glowing_brain_with_coding_symbols_202607250644.mp4";
 import posterStory4 from "../../assets/poster_story_4.jpg";
 
 interface TypographyPosterLayoutProps {
@@ -16,31 +15,19 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
   const stories = [
     {
       id: 1,
-      title: "THE IDEA ENGINE & CLAY FESTIVAL",
-      subtitle: "Sculptural Abstract Glass & Circuit Centerpiece",
-      img: posterStory1,
-      tag: "PIXAR / CLAYMorphism EDITION",
+      title: "ANIMATED MONUMENT VALLEY CLAY WORLD",
+      subtitle: "Miniature Clay Developers Coding & Rising in 3D Motion",
+      video: videoStory1,
+      poster: posterStory4,
+      tag: "PIXAR / CLAYMorphism ANIMATION",
     },
     {
       id: 2,
-      title: "THE HACKATHON ROCKET LAUNCHPAD",
-      subtitle: "Prototyping Workbenches, Soldering & Rocket Silos",
-      img: posterStory2,
-      tag: "BLENDER 3D LAUNCH EDITION",
-    },
-    {
-      id: 3,
-      title: "THE AI PAVILION & NEURAL GARDEN",
-      subtitle: "Claude vs ChatGPT vs Gemini Discussion Table",
-      img: posterStory3,
-      tag: "CINEMA4D AI DEBATE EDITION",
-    },
-    {
-      id: 4,
-      title: "MONUMENT VALLEY ARCHITECTURAL WORLD",
-      subtitle: "White Architectural Ramps, Bridges & Scaffolding",
-      img: posterStory4,
-      tag: "APPLE INDUSTRIAL DESIGN EDITION",
+      title: "NEURAL CODE MATRIX & GLOWING BRAIN",
+      subtitle: "Animated 3D Clay Brain with Code Symbols & Circuit Flow",
+      video: videoStory2,
+      poster: posterStory4,
+      tag: "CINEMA4D NEURAL MATRIX ANIMATION",
     },
   ];
 
@@ -67,15 +54,13 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
     },
   ];
 
-  // Hotkey listener for 1, 2, 3, 4
+  // Hotkey listener for 1 & 2
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
       if (e.key === "1") setActiveStory(0);
       else if (e.key === "2") setActiveStory(1);
-      else if (e.key === "3") setActiveStory(2);
-      else if (e.key === "4") setActiveStory(3);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -110,7 +95,7 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
           </div>
         </header>
 
-        {/* Master Editorial Poster Title & Hero Illustration Grid */}
+        {/* Master Editorial Poster Title & Hero Video Artwork Grid */}
         <main className="my-auto py-2 sm:py-4 grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-center overflow-hidden">
           {/* Left Column: Editorial Title & Subtitle */}
           <div className="lg:col-span-7 flex flex-col justify-center">
@@ -134,18 +119,24 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
             </div>
           </div>
 
-          {/* Right Column: Framed Museum 3D Hero Artwork */}
+          {/* Right Column: Framed Museum 3D Animated Video Artwork */}
           <div className="lg:col-span-5 flex justify-center items-center">
             <div className="relative border-2 border-slate-900 bg-white p-2 shadow-xl max-w-xs sm:max-w-md w-full">
-              <div className="overflow-hidden border border-slate-800 max-h-[160px] sm:max-h-[220px] md:max-h-[280px]">
-                <img
-                  src={currentStory.img}
-                  alt={currentStory.title}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                />
+              <div className="overflow-hidden border border-slate-800 max-h-[160px] sm:max-h-[220px] md:max-h-[280px] bg-slate-900">
+                <video
+                  key={currentStory.video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  poster={currentStory.poster}
+                  className="w-full h-full object-cover"
+                >
+                  <source src={currentStory.video} type="video/mp4" />
+                </video>
               </div>
               <div className="mt-2 flex justify-between items-center font-mono text-[9px] text-slate-700 font-bold">
-                <span>STORY 0{currentStory.id}: {currentStory.title}</span>
+                <span>OPTION 0{currentStory.id}: {currentStory.title}</span>
                 <span>{currentStory.tag}</span>
               </div>
             </div>
@@ -175,22 +166,22 @@ export const TypographyPosterLayout: React.FC<TypographyPosterLayoutProps> = ({
           </div>
         </section>
 
-        {/* Poster Colophon & Story Selector Hotkey Bar */}
+        {/* Poster Colophon & Video Option Selector Hotkey Bar */}
         <footer className="w-full flex flex-col sm:flex-row justify-between items-center pt-2 mt-2 border-t border-slate-900/20 font-mono text-[9px] text-slate-700 gap-1 flex-shrink-0 font-bold">
           <div>CURATED BY THE TECH UNIVERSE BOARD • A0 FINE ART PRINT EDITION</div>
           <div className="flex items-center gap-2">
-            <span>PRESS KEYS FOR STORIES:</span>
-            {[1, 2, 3, 4].map((num, i) => (
+            <span>PRESS KEYS TO SWITCH ANIMATIONS:</span>
+            {stories.map((st, i) => (
               <button
-                key={num}
+                key={st.id}
                 onClick={() => setActiveStory(i)}
-                className={`px-1.5 py-0.5 rounded border transition-all ${
+                className={`px-2 py-0.5 rounded border transition-all ${
                   activeStory === i
                     ? "bg-slate-950 text-white border-slate-950"
                     : "bg-white text-slate-800 border-slate-300 hover:border-slate-800"
                 }`}
               >
-                {num}
+                OPTION {st.id}
               </button>
             ))}
           </div>
